@@ -14,9 +14,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.db.Close()
+	defer db.Close()
 
-	film.InitFilm(db.db)
+	// Init packages here
+	film.InitFilm(db)
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }

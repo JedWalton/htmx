@@ -11,7 +11,7 @@ import (
 
 var (
 	once        sync.Once
-	instance    *PostgreSQL
+	instance    *sql.DB
 	instanceErr error
 )
 
@@ -19,7 +19,7 @@ type PostgreSQL struct {
 	db *sql.DB
 }
 
-func NewPostgreSQL() (*PostgreSQL, error) {
+func NewPostgreSQL() (*sql.DB, error) {
 	once.Do(func() {
 		postgresqlURL := os.Getenv("POSTGRESQL_URL")
 		if postgresqlURL == "" {
@@ -37,7 +37,7 @@ func NewPostgreSQL() (*PostgreSQL, error) {
 			return
 		}
 
-		instance = &PostgreSQL{db: db}
+		instance = db
 	})
 
 	return instance, instanceErr
