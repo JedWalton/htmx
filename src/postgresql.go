@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"sync"
+
+	_ "github.com/lib/pq" // This is the PostgreSQL driver for database/sql
 )
 
 var (
