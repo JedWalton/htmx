@@ -1,21 +1,24 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"htmx/film"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
 	fmt.Println("Listening on port 8000...")
 
-	db, err := NewPostgreSQL()
+	db, err := sql.Open("postgres", os.Getenv("POSTGRESQL_URL"))
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		log.Fatal(err)
 	}
+	defer db.Close()
 
-	film.InitRoutes()
+	film.InitFilm(db)
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }

@@ -1,9 +1,14 @@
 package film
 
-import "net/http"
+import (
+	"database/sql"
+	"net/http"
+)
 
-func InitRoutes() {
-	// define handlers
-	http.HandleFunc("/", h1)
-	http.HandleFunc("/add-film/", h2)
+func InitFilm(db *sql.DB) {
+	filmRepo := NewFilmRepository(db)
+	filmHandlers := NewHandlers(filmRepo)
+
+	http.HandleFunc("/", filmHandlers.H1)
+	http.HandleFunc("/add-film/", filmHandlers.H2)
 }
