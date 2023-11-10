@@ -10,12 +10,6 @@ import (
 func main() {
 	fmt.Println("Listening on port 8000...")
 
-	// db, err := sql.Open("postgres", os.Getenv("POSTGRESQL_URL"))
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer db.Close()
-
 	db, err := NewPostgreSQL()
 	if err != nil {
 		log.Fatal(err)
