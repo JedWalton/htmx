@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"htmx/film"
 	"log"
 	"net/http"
 )
@@ -9,7 +10,12 @@ import (
 func main() {
 	fmt.Println("Listening on port 8000...")
 
-	initRoutes()
+	db, err := NewPostgreSQL()
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+
+	film.InitRoutes()
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }

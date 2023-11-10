@@ -4,6 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"sync"
+)
+
+var (
+	once        sync.Once
+	instance    *PostgreSQL
+	instanceErr error
 )
 
 type PostgreSQL struct {
@@ -11,19 +18,25 @@ type PostgreSQL struct {
 }
 
 func NewPostgreSQL() (*PostgreSQL, error) {
-	postgresqlURL := os.Getenv("POSTGRESQL_URL")
-	if postgresqlURL == "" {
-		return nil, fmt.Errorf("POSTGRESQL_URL environment variable is not set")
-	}
+	once.Do(func() {
+		postgresqlURL := os.Getenv("POSTGRESQL_URL")
+		if postgresqlURL == "" {
+			instanceErr = fmt.Errorf("POSTGRESQL_URL environment variable is not set")
+			return
+		}
 
-	db, err := sql.Open("postgres", postgresqlURL)
-	if err != nil {
-		return nil, err
-	}
+		var db *sql.DB
+		db, instanceErr = sql.Open("postgres", postgresqlURL)
+		if instanceErr != nil {
+			return
+		}
 
-	if err := db.Ping(); err != nil {
-		return nil, err
-	}
+		if instanceErr = db.Ping(); instanceErr != nil {
+			return
+		}
 
-	return &PostgreSQL{db: db}, nil
+		instance = &PostgreSQL{db: db}
+	})
+
+	return instance, instanceErr
 }
