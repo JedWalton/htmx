@@ -2,4 +2,4 @@
 
 export POSTGRESQL_URL=postgres://postgres:mysecretpassword@localhost:5432/devdb?sslmode=disable
 
-migrate -database ${POSTGRESQL_URL} -path ./migrations up
+migrate -database ${POSTGRESQL_URL} -path ../migrations up
