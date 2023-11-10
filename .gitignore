@@ -159,3 +159,4 @@ Godeps/
 
 .env
 htmx
+*.air.tmp
