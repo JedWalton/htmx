@@ -5,10 +5,15 @@ import (
 	"htmx/film"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
-	fmt.Println("Listening on port 8000...")
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("PORT environment variable is not set.")
+	}
+	fmt.Printf("Listening on port %v\n", port)
 
 	db, err := NewPostgreSQL()
 	if err != nil {
@@ -19,5 +24,5 @@ func main() {
 	// Init packages here
 	film.InitFilm(db)
 
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

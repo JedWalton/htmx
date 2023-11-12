@@ -10,9 +10,3 @@ CREATE TABLE films (
 CREATE INDEX idx_films_title ON films (title);
 CREATE INDEX idx_films_director ON films (director);
 
--- Insert film data into the films table
-INSERT INTO films (title, director) VALUES 
-('The Godfather', 'Francis Ford Coppola'),
-('Blade Runner', 'Ridley Scott'),
-('The Thing', 'John Carpenter');
-
