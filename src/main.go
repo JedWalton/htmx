@@ -47,7 +47,7 @@ func main() {
 	// Init packages here
 	film.InitFilm(db)
 
-	fmt.Printf("Listening on port %v\n", port)
+	log.Printf("Listening on port %v\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
