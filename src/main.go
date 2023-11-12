@@ -12,6 +12,11 @@ import (
 	_ "github.com/lib/pq" // This is the PostgreSQL driver for database/sql
 )
 
+// Define a struct to hold the db connection
+type AppHandler struct {
+	db *sql.DB
+}
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -36,9 +41,26 @@ func main() {
 	}
 	defer db.Close()
 
+	handler := &AppHandler{db: db}
+	http.HandleFunc("/health", handler.HealthCheckHandler)
+
 	// Init packages here
 	film.InitFilm(db)
 
 	fmt.Printf("Listening on port %v\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+func (h *AppHandler) HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	// Use h.db for database operations
+	if err := h.db.Ping(); err != nil {
+		// If the database is not reachable, return an error response
+		http.Error(w, "Database not reachable", http.StatusInternalServerError)
+		return
+	}
+
+	// You can add more checks here if necessary
+
+	// If everything is okay, send a success response
+	fmt.Fprintln(w, "OK")
 }
