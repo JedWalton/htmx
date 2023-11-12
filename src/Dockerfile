@@ -31,7 +31,7 @@ COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 
 # Copy the fe directory to the same relative location as in the source
-COPY --from=builder /app/src/fe /go/bin/fe
+COPY --from=builder /app/fe /go/bin/fe
 
 # Copy our static executable
 COPY --from=builder /go/bin/myapp /go/bin/myapp
