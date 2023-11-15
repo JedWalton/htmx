@@ -5,9 +5,13 @@ import (
 	"net/http"
 )
 
-func InitFilm(db *sql.DB) {
+func initFilmHandlers(db *sql.DB) *Handlers {
 	filmRepo := NewFilmRepository(db)
-	filmHandlers := NewHandlers(filmRepo)
+	return NewHandlers(filmRepo)
+}
+
+func InitFilm(db *sql.DB) {
+	filmHandlers := initFilmHandlers(db)
 
 	http.HandleFunc("/", filmHandlers.H1)
 	http.HandleFunc("/add-film/", filmHandlers.H2)
